@@ -18,7 +18,7 @@ app.use(
   cors({
     origin:
       NODE_ENV === "production" 
-        ? ["https://batterytech-explorer.vercel.app"] 
+        ? ["https://batterytech-explorer.vercel.app", "https://your-render-app.onrender.com"] 
         : ["http://localhost:3000"],
   }),
 )
