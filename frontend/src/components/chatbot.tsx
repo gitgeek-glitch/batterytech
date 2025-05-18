@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send } from "lucide-react"
+import { Send } from 'lucide-react'
 
 type Message = {
   id: string
@@ -27,10 +27,16 @@ export default function Chatbot() {
   const [isStreaming, setIsStreaming] = useState(false)
   const [streamedResponse, setStreamedResponse] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     scrollToBottom()
   }, [messages, streamedResponse])
+
+  // Focus input on component mount
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -113,17 +119,19 @@ export default function Chatbot() {
     } finally {
       setIsLoading(false)
       setIsStreaming(false)
+      // Focus back on input after response
+      inputRef.current?.focus()
     }
   }
 
   return (
-    <div className="flex h-[calc(100vh-57px)] flex-col">
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4 pb-4">
+    <div className="flex h-[calc(100vh-57px)] flex-col w-full max-w-full overflow-hidden">
+      <ScrollArea className="flex-1 p-2 sm:p-4">
+        <div className="space-y-4 pb-4 max-w-3xl mx-auto">
           {messages.map((message) => (
             <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
               <div
-                className={`rounded-lg px-4 py-2 max-w-[80%] ${
+                className={`rounded-lg px-3 py-2 sm:px-4 sm:py-2 max-w-[85%] sm:max-w-[80%] break-words ${
                   message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                 }`}
               >
@@ -133,12 +141,14 @@ export default function Chatbot() {
           ))}
           {isStreaming && streamedResponse && (
             <div className="flex justify-start">
-              <div className="rounded-lg px-4 py-2 max-w-[80%] bg-muted">{streamedResponse}</div>
+              <div className="rounded-lg px-3 py-2 sm:px-4 sm:py-2 max-w-[85%] sm:max-w-[80%] break-words bg-muted">
+                {streamedResponse}
+              </div>
             </div>
           )}
           {isLoading && !streamedResponse && (
             <div className="flex justify-start">
-              <div className="rounded-lg px-4 py-2 max-w-[80%] bg-muted">
+              <div className="rounded-lg px-3 py-2 sm:px-4 sm:py-2 max-w-[85%] sm:max-w-[80%] bg-muted">
                 <div className="flex space-x-1">
                   <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground"></div>
                   <div className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground delay-75"></div>
@@ -151,15 +161,24 @@ export default function Chatbot() {
         </div>
       </ScrollArea>
 
-      <form onSubmit={handleSubmit} className="border-t p-4 flex items-center space-x-2">
+      <form 
+        onSubmit={handleSubmit} 
+        className="border-t p-2 sm:p-4 flex items-center space-x-2 max-w-3xl mx-auto w-full"
+      >
         <Input
+          ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about battery technology..."
           disabled={isLoading}
           className="flex-1"
         />
-        <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+        <Button 
+          type="submit" 
+          size="icon" 
+          disabled={isLoading || !input.trim()}
+          className="shrink-0"
+        >
           <Send className="h-4 w-4" />
           <span className="sr-only">Send message</span>
         </Button>
