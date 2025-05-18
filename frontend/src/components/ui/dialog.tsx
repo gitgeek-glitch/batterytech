@@ -56,15 +56,13 @@ const hasDialogTitle = (children: React.ReactNode): boolean => {
   const childrenArray = React.Children.toArray(children)
   return childrenArray.some((child) => {
     if (!React.isValidElement(child)) return false
-    
-    // Check if it's directly a DialogTitle
+
     if (child.type === DialogPrimitive.Title) return true
-    
-    // Check children recursively if they exist
+
     if (child.props && typeof child.props === 'object' && 'children' in child.props) {
-      return hasDialogTitle(child.props.children as React.ReactNode)
+      return hasDialogTitle(child.props.children as React.ReactNode) // ✅ cast to ReactNode
     }
-    
+
     return false
   })
 }
@@ -73,18 +71,17 @@ const hasDialogDescription = (children: React.ReactNode): boolean => {
   const childrenArray = React.Children.toArray(children)
   return childrenArray.some((child) => {
     if (!React.isValidElement(child)) return false
-    
-    // Check if it's directly a DialogDescription
+
     if (child.type === DialogPrimitive.Description) return true
-    
-    // Check children recursively if they exist
+
     if (child.props && typeof child.props === 'object' && 'children' in child.props) {
-      return hasDialogDescription(child.props.children as React.ReactNode)
+      return hasDialogDescription(child.props.children as React.ReactNode) // ✅ cast to ReactNode
     }
-    
+
     return false
   })
 }
+
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
