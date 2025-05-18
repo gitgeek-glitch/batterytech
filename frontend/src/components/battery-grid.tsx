@@ -38,7 +38,7 @@ export default function BatteryGrid() {
       lifespan: "Medium",
     },
     {
-      id: "zinc-mno2",
+      id: "alkaline",
       name: "Zinc-MnO₂ (Alkaline)",
       type: "primary",
       shortDescription: "Common household battery with good shelf life",
@@ -46,7 +46,7 @@ export default function BatteryGrid() {
       lifespan: "Medium",
     },
     {
-      id: "lithium-primary",
+      id: "primary-lithium",
       name: "Primary Lithium",
       type: "primary",
       shortDescription: "High energy density, long shelf life",
@@ -64,7 +64,7 @@ export default function BatteryGrid() {
       lifespan: "Medium",
     },
     {
-      id: "nicd",
+      id: "nickel-cadmium",
       name: "Nickel-Cadmium (NiCd)",
       type: "secondary",
       shortDescription: "Robust rechargeable with memory effect",
@@ -72,7 +72,7 @@ export default function BatteryGrid() {
       lifespan: "Long",
     },
     {
-      id: "nimh",
+      id: "nickel-metal-hydride",
       name: "Nickel-Metal Hydride (NiMH)",
       type: "secondary",
       shortDescription: "Higher capacity than NiCd, less memory effect",
@@ -90,7 +90,7 @@ export default function BatteryGrid() {
 
     // Fuel Cells
     {
-      id: "pem",
+      id: "pem-fuel-cell",
       name: "Polymer Electrolyte Membrane (PEM)",
       type: "fuel-cell",
       shortDescription: "Low temperature operation, used in vehicles",
@@ -98,7 +98,7 @@ export default function BatteryGrid() {
       lifespan: "Long",
     },
     {
-      id: "alkaline-fc",
+      id: "alkaline-fuel-cell",
       name: "Alkaline Fuel Cell",
       type: "fuel-cell",
       shortDescription: "Used in space applications, high efficiency",
@@ -106,7 +106,7 @@ export default function BatteryGrid() {
       lifespan: "Long",
     },
     {
-      id: "mcfc",
+      id: "molten-carbonate-fuel-cell",
       name: "Molten Carbonate Fuel Cell",
       type: "fuel-cell",
       shortDescription: "High temperature, suitable for stationary power",
@@ -114,7 +114,7 @@ export default function BatteryGrid() {
       lifespan: "Long",
     },
     {
-      id: "sofc",
+      id: "solid-oxide-fuel-cell",
       name: "Solid Oxide Fuel Cell",
       type: "fuel-cell",
       shortDescription: "Very high temperature, high efficiency",

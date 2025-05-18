@@ -55,30 +55,38 @@ export default function BatteryVisualization({ batteryId }: BatteryVisualization
         drawZincCarbonBattery(ctx, dimensions.width, dimensions.height)
         break
       case "pem-fuel-cell":
+      case "pem": // Add alias
         drawPEMFuelCell(ctx, dimensions.width, dimensions.height)
         break
       case "zinc-air":
         drawZincAirBattery(ctx, dimensions.width, dimensions.height)
         break
       case "alkaline":
+      case "zinc-mno2": // Add alias
         drawAlkalineBattery(ctx, dimensions.width, dimensions.height)
         break
       case "primary-lithium":
+      case "lithium-primary": // Add alias
         drawPrimaryLithiumBattery(ctx, dimensions.width, dimensions.height)
         break
       case "nickel-cadmium":
+      case "nicd": // Add alias
         drawNickelCadmiumBattery(ctx, dimensions.width, dimensions.height)
         break
       case "nickel-metal-hydride":
+      case "nimh": // Add alias
         drawNickelMetalHydrideBattery(ctx, dimensions.width, dimensions.height)
         break
       case "alkaline-fuel-cell":
+      case "alkaline-fc": // Add alias
         drawAlkalineFuelCell(ctx, dimensions.width, dimensions.height)
         break
       case "molten-carbonate-fuel-cell":
+      case "mcfc": // Add alias
         drawMoltenCarbonateFuelCell(ctx, dimensions.width, dimensions.height)
         break
       case "solid-oxide-fuel-cell":
+      case "sofc": // Add alias
         drawSolidOxideFuelCell(ctx, dimensions.width, dimensions.height)
         break
       default:
@@ -94,19 +102,28 @@ export default function BatteryVisualization({ batteryId }: BatteryVisualization
 
       // Only redraw if we need animation
       if (
-        ["lithium-ion", "pem-fuel-cell", "zinc-air", "alkaline-fuel-cell", "solid-oxide-fuel-cell"].includes(batteryId)
+        [
+          "lithium-ion",
+          "pem-fuel-cell",
+          "pem",
+          "zinc-air",
+          "alkaline-fuel-cell",
+          "alkaline-fc",
+          "solid-oxide-fuel-cell",
+          "sofc",
+        ].includes(batteryId)
       ) {
         ctx.clearRect(0, 0, dimensions.width, dimensions.height)
 
         if (batteryId === "lithium-ion") {
           drawLithiumIonBattery(ctx, dimensions.width, dimensions.height, time)
-        } else if (batteryId === "pem-fuel-cell") {
+        } else if (batteryId === "pem-fuel-cell" || batteryId === "pem") {
           drawPEMFuelCell(ctx, dimensions.width, dimensions.height, time)
         } else if (batteryId === "zinc-air") {
           drawZincAirBattery(ctx, dimensions.width, dimensions.height, time)
-        } else if (batteryId === "alkaline-fuel-cell") {
+        } else if (batteryId === "alkaline-fuel-cell" || batteryId === "alkaline-fc") {
           drawAlkalineFuelCell(ctx, dimensions.width, dimensions.height, time)
-        } else if (batteryId === "solid-oxide-fuel-cell") {
+        } else if (batteryId === "solid-oxide-fuel-cell" || batteryId === "sofc") {
           drawSolidOxideFuelCell(ctx, dimensions.width, dimensions.height, time)
         }
       }
@@ -1342,7 +1359,10 @@ function drawSolidOxideFuelCell(ctx: CanvasRenderingContext2D, width: number, he
 }
 
 // Add a custom hook for resize observer if it doesn't exist
-export function useResizeObserver(ref: React.RefObject<Element | null>, callback: (entry: ResizeObserverEntry) => void) {
+export function useResizeObserver(
+  ref: React.RefObject<Element | null>,
+  callback: (entry: ResizeObserverEntry) => void,
+) {
   useEffect(() => {
     if (ref.current) {
       const observer = new ResizeObserver((entries) => {

@@ -208,12 +208,13 @@ export default function BatteryDetailModal({ batteryId, open, onClose }: Battery
       // For now, we'll simulate fetching data
       setTimeout(() => {
         // This is mock data - in a real app, you'd fetch this from your API
-        const mockBatteryData: Record<string, BatteryDetail> = {
+        const baseBatteryData: Record<string, BatteryDetail> = {
           // Original batteries from first file
           "lithium-ion": {
             id: "lithium-ion",
             name: "Lithium-Ion Battery",
             type: "Secondary",
+            // rest of the properties remain the same
             description:
               "Lithium-ion batteries are rechargeable batteries that use lithium ions as the primary component of their electrolyte. They have high energy density, no memory effect, and low self-discharge when not in use. High energy density, powers modern electronics.",
             chemistry: {
@@ -749,7 +750,25 @@ export default function BatteryDetailModal({ batteryId, open, onClose }: Battery
           },
         }
 
-        setBattery(mockBatteryData[batteryId] || null)
+        // Create alias mappings using the base battery data
+        const mockBatteryData = {
+          ...baseBatteryData,
+          "zinc-mno2": { ...baseBatteryData["alkaline"], id: "zinc-mno2" },
+          "lithium-primary": { ...baseBatteryData["primary-lithium"], id: "lithium-primary" },
+          nicd: { ...baseBatteryData["nickel-cadmium"], id: "nicd" },
+          nimh: { ...baseBatteryData["nickel-metal-hydride"], id: "nimh" },
+          pem: { ...baseBatteryData["pem-fuel-cell"], id: "pem" },
+          "alkaline-fc": { ...baseBatteryData["alkaline-fuel-cell"], id: "alkaline-fc" },
+          mcfc: { ...baseBatteryData["molten-carbonate-fuel-cell"], id: "mcfc" },
+          sofc: { ...baseBatteryData["solid-oxide-fuel-cell"], id: "sofc" },
+        };
+
+        // Type guard to check if batteryId is a valid key
+        const isValidBatteryId = (id: string): id is keyof typeof mockBatteryData => {
+          return id in mockBatteryData
+        }
+        
+        setBattery(isValidBatteryId(batteryId) ? mockBatteryData[batteryId] : null)
         setLoading(false)
       }, 1000)
     }
