@@ -6,6 +6,28 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Skeleton } from "@/components/ui/skeleton"
 import BatteryVisualization from "@/components/battery-visualization"
 
+// VisuallyHidden component for accessibility (from dialog.tsx)
+const VisuallyHidden = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <span
+      style={{
+        border: 0,
+        clip: "rect(0 0 0 0)",
+        height: "1px",
+        margin: "-1px",
+        overflow: "hidden",
+        padding: 0,
+        position: "absolute",
+        width: "1px",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+VisuallyHidden.displayName = "VisuallyHidden"
+
 interface BatteryDetailModalProps {
   batteryId: string
   open: boolean
@@ -237,11 +259,20 @@ export default function BatteryDetailModal({ batteryId, open, onClose }: Battery
     }
   }, [batteryId, open])
 
+  // Determine the title to use for accessibility
+  const accessibleTitle = battery ? battery.name : loading ? "Loading Battery Information" : "Battery Information Not Found"
+
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        {/* Always provide a DialogTitle for accessibility */}
         {loading ? (
-          <BatteryDetailSkeleton />
+          <>
+            <DialogHeader>
+              <DialogTitle>Loading Battery Information</DialogTitle>
+            </DialogHeader>
+            <BatteryDetailSkeleton />
+          </>
         ) : battery ? (
           <>
             <DialogHeader>
@@ -340,9 +371,14 @@ export default function BatteryDetailModal({ batteryId, open, onClose }: Battery
             </div>
           </>
         ) : (
-          <div className="py-8 text-center">
-            <p>Battery information not found.</p>
-          </div>
+          <>
+            <DialogHeader>
+              <DialogTitle>Battery Information Not Found</DialogTitle>
+            </DialogHeader>
+            <div className="py-8 text-center">
+              <p>Battery information not found.</p>
+            </div>
+          </>
         )}
       </DialogContent>
     </Dialog>
@@ -352,11 +388,6 @@ export default function BatteryDetailModal({ batteryId, open, onClose }: Battery
 function BatteryDetailSkeleton() {
   return (
     <>
-      <DialogHeader>
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-4 w-20 mt-2" />
-      </DialogHeader>
-
       <div className="mt-4">
         <Skeleton className="h-4 w-full mb-2" />
         <Skeleton className="h-4 w-full mb-2" />
