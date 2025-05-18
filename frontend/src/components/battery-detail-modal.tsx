@@ -402,8 +402,10 @@ export default function BatteryDetailModal({ batteryId, open, onClose }: Battery
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        {/* Always provide a DialogTitle for accessibility */}
+      <DialogContent 
+        className="max-w-4xl max-h-[90vh] overflow-y-auto"
+        title={accessibleTitle} // Always provide a title prop to DialogContent
+      >
         {loading ? (
           <>
             <DialogHeader>
