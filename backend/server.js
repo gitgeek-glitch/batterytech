@@ -1,25 +1,32 @@
 import express from "express"
 import cors from "cors"
 import { rateLimit } from "express-rate-limit"
+import dotenv from 'dotenv'
 import batteryData from "./data/batteries.js"
 import quizData from "./data/quizzes.js"
 
+// Load environment variables
+dotenv.config()
+
 const app = express()
 const PORT = process.env.PORT || 3001
+const NODE_ENV = process.env.NODE_ENV || 'development'
 
 // Middleware
 app.use(express.json())
 app.use(
   cors({
     origin:
-      process.env.NODE_ENV === "production" ? ["https://batterytech-explorer.vercel.app"] : ["http://localhost:3000"],
+      NODE_ENV === "production" 
+        ? ["https://batterytech-explorer.vercel.app"] 
+        : ["http://localhost:3000"],
   }),
 )
 
 // Rate limiting
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: process.env.RATE_LIMIT || 100, // limit each IP to 100 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
 })
@@ -75,7 +82,7 @@ app.get("/health", (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`)
 })
 
 export default app
